@@ -14,32 +14,42 @@ else:
 
 Xcx, dEdX, zenith = conex_read.readRoot(file)
 
-# Determine the maximum length among the zenith arrays
-# max_len = max(len(arr) for arr in zenith)
-
-# Create an array to store the zenith data with consistent shape
-# zenith_data = np.zeros((len(zenith), max_len), dtype=np.float32)
-
-# Copy and reshape the zenith data into the zenith_data array
-# for i, arr in enumerate(zenith):
-#     zenith_data[i, :len(arr)] = arr
-print(Xcx.shape)
 maxLength = max(len(arr) for arr in Xcx)
-
 for i, array in enumerate(Xcx):
     while len(Xcx[i]) < maxLength:
         Xcx[i] = np.append(Xcx[i], 0)
         dEdX[i] = np.append(dEdX[i], 0)
+
+
+zenith = list([list([x]) for x in zenith])
+newZenithArray = []
+for i in range(len(Xcx)):
+    newZenith = []
+    for j in range(len(Xcx[i])):
+        newZenith.append(float(zenith[i][0]))    
+    newZenithArray.append(newZenith)
+
+zenith = newZenithArray
+for i in range(len(zenith)):
+    zenith[i] = np.array(zenith[i]) 
+
 
 for i, array in enumerate(dEdX):
     maxHeight = max(dEdX[i])
     for j, value in enumerate(dEdX[i]):
         dEdX[i][j] /= maxHeight
 
+
 Xcx = np.vstack(Xcx)
 dEdX = np.vstack(dEdX)
+zenith = np.vstack(zenith)
+print(Xcx.shape)
+print(dEdX.shape)
+print(zenith.shape)
+zenith = np.vstack(zenith)
 
-X = np.stack([Xcx, dEdX], axis = -1)
+
+X = np.stack([Xcx, dEdX, zenith], axis = -1)
 
 for i in range(100):
     plt.scatter(Xcx[i], dEdX[i], s=0.5)
@@ -57,11 +67,9 @@ model = cn.create_model(X.shape)
 model.compile(optimizer="adam", loss="mean_squared_error")
 print(model.summary())
 
-# Ensure that mass_train is a NumPy array, not a scalar
+
 mass = np.full(100, 20, dtype=np.float32)
 
-# print(X.shape)
-# print(mass.shape)
 X_train, X_test = np.split(X, [50])
 mass_train, mass_test = np.split(mass, [50])
 
