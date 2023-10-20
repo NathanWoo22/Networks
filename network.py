@@ -23,6 +23,19 @@ def expandZenithAngles(zenithAngles, newLength):
 
     return zenithAngles
 
+def expandXcxdEdX(Xcx, dEdX, maxLength):
+    for i, array in enumerate(Xcx):
+        while len(Xcx[i]) < maxLength:
+            Xcx[i] = np.append(Xcx[i], 0)
+            dEdX[i] = np.append(dEdX[i], 0)
+
+    for i, array in enumerate(dEdX):
+        maxHeight = max(dEdX[i])
+        for j, value in enumerate(dEdX[i]):
+            dEdX[i][j] /= maxHeight
+
+    return Xcx, dEdX
+
 if len(sys.argv) > 1:
     file = sys.argv[1]
 else:
@@ -32,18 +45,12 @@ else:
 Xcx, dEdX, zenith = conex_read.readRoot(file)
 
 maxLength = max(len(arr) for arr in Xcx)
-for i, array in enumerate(Xcx):
-    while len(Xcx[i]) < maxLength:
-        Xcx[i] = np.append(Xcx[i], 0)
-        dEdX[i] = np.append(dEdX[i], 0)
 
-
-for i, array in enumerate(dEdX):
-    maxHeight = max(dEdX[i])
-    for j, value in enumerate(dEdX[i]):
-        dEdX[i][j] /= maxHeight
-
+# Format all inputs to the network
+Xcx, dEdX = expandXcxdEdX(Xcx, dEdX, maxLength)
 zenith = expandZenithAngles(zenith, maxLength)
+
+
 Xcx = np.vstack(Xcx)
 dEdX = np.vstack(dEdX)
 zenith = np.vstack(zenith)
