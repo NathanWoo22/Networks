@@ -6,6 +6,23 @@ import keras
 import conex_read
 import convolutional_network as cn
 
+# converts a list of zenith angles to a list of the same angle with different lengths
+def expandZenithAngles(zenithAngles, newLength):
+    
+    zenithAnglesList = list([list([x]) for x in zenithAngles])
+    extendedZenithList = []
+    for i in range(len(Xcx)):
+        newZenithList = []
+        for j in range(len(Xcx[i])):
+            newZenithList.append(float(zenithAnglesList[i][0]))    
+        extendedZenithList.append(newZenithList)
+
+    zenithAngles = extendedZenithList
+    for i in range(len(zenithAngles)):
+        zenithAngles[i] = np.array(zenithAngles[i]) 
+
+    return zenithAngles
+
 if len(sys.argv) > 1:
     file = sys.argv[1]
 else:
@@ -21,25 +38,12 @@ for i, array in enumerate(Xcx):
         dEdX[i] = np.append(dEdX[i], 0)
 
 
-zenith = list([list([x]) for x in zenith])
-newZenithArray = []
-for i in range(len(Xcx)):
-    newZenith = []
-    for j in range(len(Xcx[i])):
-        newZenith.append(float(zenith[i][0]))    
-    newZenithArray.append(newZenith)
-
-zenith = newZenithArray
-for i in range(len(zenith)):
-    zenith[i] = np.array(zenith[i]) 
-
-
 for i, array in enumerate(dEdX):
     maxHeight = max(dEdX[i])
     for j, value in enumerate(dEdX[i]):
         dEdX[i][j] /= maxHeight
 
-
+zenith = expandZenithAngles(zenith, maxLength)
 Xcx = np.vstack(Xcx)
 dEdX = np.vstack(dEdX)
 zenith = np.vstack(zenith)

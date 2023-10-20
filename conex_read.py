@@ -3,16 +3,6 @@ import numpy as np
 import sys
 import matplotlib.pyplot as plt
 
-# if len(sys.argv) > 1:
-#     file = sys.argv[1]
-# else:
-#     print("Usage: conex_read.py <rootfile.root>")
-#     exit()
-
-#Xmax for composition
-#Integral for energy 
-
-#Searching for 
 def readRoot(file):
     filecx=uproot.open(file)
     tshowercx=filecx["Shower"]
@@ -45,13 +35,3 @@ def readRoot(file):
     Xcx=np.array(tshowercx["X"])
     zenith=np.array(tshowercx["zenith"])
     return Xcx, dEdX, zenith
-
-
-# for i in range(100):
-#     plt.scatter(Xcx[i], dEdX[i], s=0.5)
-#     plt.xlabel('X')
-#     plt.ylabel('dEdX')
-#     plt.title('Energy deposit per cm')
-
-# plt.show()
-# plt.savefig('Energy function plot', dpi = 1000)

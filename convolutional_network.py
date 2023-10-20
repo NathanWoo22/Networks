@@ -34,7 +34,6 @@ Now, we will set up a neural network to reconstruct the energy of the particle s
 > *   Increase the Dropout fraction or place Dropout between several layers if you observe overtraining (validation loss increases).
 
 
-
 """
 
 activationFunction = "elu"
