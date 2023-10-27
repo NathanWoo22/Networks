@@ -5,6 +5,10 @@ import matplotlib.pyplot as plt
 import keras
 import conex_read
 import convolutional_network as cn
+import tensorflow as tf
+import os
+import glob
+import re
 
 # converts a list of zenith angles to a list of the same angle with different lengths
 def expandZenithAngles(zenithAngles, newLength):
@@ -36,70 +40,106 @@ def expandXcxdEdX(Xcx, dEdX, maxLength):
 
     return Xcx, dEdX
 
-if len(sys.argv) > 1:
-    file = sys.argv[1]
-else:
-    print("Usage: conex_read.py <rootfile.root>")
-    exit()
-
-Xcx, dEdX, zenith = conex_read.readRoot(file)
-
-maxLength = max(len(arr) for arr in Xcx)
-
-# Format all inputs to the network
-Xcx, dEdX = expandXcxdEdX(Xcx, dEdX, maxLength)
-zenith = expandZenithAngles(zenith, maxLength)
+def runModel(model, learning_rate, batch_size, epochs, validation_split):
+    model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
+        filepath='./best_saved_network',
+        monitor='val_loss',
+        mode='min',
+        save_best_only=True,
+        verbose=1  
+    )
 
 
-Xcx = np.vstack(Xcx)
-dEdX = np.vstack(dEdX)
-zenith = np.vstack(zenith)
-print(Xcx.shape)
-print(dEdX.shape)
-print(zenith.shape)
-zenith = np.vstack(zenith)
+    fit = model.fit(
+        X_train,
+        mass_train,
+        batch_size=batch_size,
+        epochs=epochs,
+        verbose=2,
+        callbacks=[model_checkpoint_callback],
+        validation_split=validation_split,
+        workers = 100,
+        use_multiprocessing = True
+    )
+
+    return fit
+
+def plotdEdX(Xcx, dEdX):
+    for i in range(100):
+        plt.scatter(Xcx[i], dEdX[i], s=0.5)
+        plt.xlabel('X')
+        plt.ylabel('dEdX')
+        plt.title('Energy deposit per cm')
+
+    plt.show()
+    plt.savefig('Energy function plot', dpi = 1000)
 
 
-X = np.stack([Xcx, dEdX, zenith], axis = -1)
+# if len(sys.argv) > 1:
+#     file = sys.argv[1]
+# else:
+#     print("Usage: conex_read.py <rootfile.root>")
+#     exit()
 
-for i in range(100):
-    plt.scatter(Xcx[i], dEdX[i], s=0.5)
-    plt.xlabel('X')
-    plt.ylabel('dEdX')
-    plt.title('Energy deposit per cm')
+folder_path = "/Data/Simulations/Conex_Flat_lnA/data/Conex_170-205_Prod1/showers"
+fileNames = glob.glob(os.path.join(folder_path, '*.root'))
 
-plt.show()
-plt.savefig('Energy function plot', dpi = 1000)
 
+XcxAll = []
+dEdXAll = []
+zenithAll = []
+massAll = []
+count = 0
+# Read data for network
+for fileName in fileNames:
+    count += 1
+    if count == 20:
+        break
+    print("Reading file " + fileName)
+    pattern = r'_(\d+)\.root'
+    match = re.search(pattern, fileName)
+    if match:
+        mass = match.group(1)
+        print(f"Mass is: {mass}")
+    else:
+        print("No match found.")
+
+    Xcx, dEdX, zenith = conex_read.readRoot(fileName)
+
+    # Format all inputs to the network
+    # maxLength = max(len(arr) for arr in Xcx)
+    maxLength = 700
+    Xcx, dEdX = expandXcxdEdX(Xcx, dEdX, maxLength)
+    zenith = expandZenithAngles(zenith, maxLength)
+
+    Xcx = np.vstack(Xcx)
+    dEdX = np.vstack(dEdX)
+    zenith = np.vstack(zenith)
+
+    XcxAll.append(Xcx)
+    dEdXAll.append(dEdX)
+    zenithAll.append(zenith)
+    massAll.append(float(mass))
+    print("Finished reading file " + fileName)
+
+
+X = np.stack([XcxAll, dEdXAll, zenithAll], axis = -1)
+# mass = np.full(100, 20, dtype=np.float32)
+
+X_train, X_test = np.split(X, [50 * len(fileNames)])
+mass_train, mass_test = np.split(massAll, [50 * len(fileNames)])
+
+learning_rate = 1e-3
+batch_size = 50
+epochs =1000
+validation_split = 0.5
 # Create the model
-model = cn.create_model(X.shape)
+model = cn.create_model(X.shape, learning_rate)
 
-# Compile the model
-model.compile(optimizer="adam", loss="mean_squared_error")
 print(model.summary())
 
+fit = runModel(model, learning_rate, batch_size, epochs, validation_split)
 
-mass = np.full(100, 20, dtype=np.float32)
-
-X_train, X_test = np.split(X, [50])
-mass_train, mass_test = np.split(mass, [50])
-
-model.compile(
-    loss='mean_squared_error',
-    optimizer=keras.optimizers.Adam(learning_rate=1e-4))
-
-fit = model.fit(
-    X_train,
-    mass_train,
-    batch_size=16,
-    epochs=1000,
-    verbose=2,
-    # callbacks=[model_checkpoint_callback],
-    validation_split=0.5,
-    workers = 100,
-    use_multiprocessing = True
-
-)
 
 fig, ax = plt.subplots(1, figsize=(8,5))
 n = np.arange(len(fit.history['loss']))

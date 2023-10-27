@@ -38,12 +38,10 @@ Now, we will set up a neural network to reconstruct the energy of the particle s
 
 activationFunction = "elu"
 
-def create_model(shape):
+def create_model(shape, learning_rate):
   model = keras.models.Sequential(name="energy_regression_CNN")
   kwargs = dict(kernel_initializer="he_normal", padding="same",)
   model.add(layers.Conv1D(16, 2, activation=activationFunction, input_shape=shape[1:], **kwargs))
-  model.add(layers.Dense(100, activation="relu"))
-  model.add(layers.Dense(100, activation="relu"))
   model.add(layers.Dense(100, activation="relu"))
   # model.add(layers.Dense(20, activation="relu"))
   # model.add(layers.Dense(20, activation="relu"))
@@ -57,9 +55,14 @@ def create_model(shape):
   model.add(layers.Flatten())
   model.add(layers.Dense(1))
 
+  model = compileModel(model, learning_rate)
   return model
 
-
+def compileModel(model, learning_rate):
+  model.compile(
+    loss='mean_squared_error',
+    optimizer=keras.optimizers.Adam(learning_rate=1e-4))
+  return model
 # Bias: -0.008 Resolution: 0.458 Batch_Size = 128 Epochs: 2000 v_split: 0.3 val_loss: 0.19568, training_rate = 0.001
   # model = keras.models.Sequential(name="energy_regression_CNN")
   # kwargs = dict(kernel_initializer="he_normal", padding="same",)
