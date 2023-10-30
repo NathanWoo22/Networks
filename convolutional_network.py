@@ -1,11 +1,11 @@
 import tensorflow as tf
 from tensorflow import keras
 import numpy as np
-import seaborn as sns
+# import seaborn as sns
 from matplotlib import pyplot as plt
 layers = keras.layers
 import os
-import conex_read
+# import conex_read
 
 plt.figure(figsize=(9,7))
 
@@ -36,23 +36,39 @@ Now, we will set up a neural network to reconstruct the energy of the particle s
 
 """
 
-activationFunction = "elu"
+activationFunction = "relu"
 
 def create_model(shape, learning_rate):
   model = keras.models.Sequential(name="energy_regression_CNN")
   kwargs = dict(kernel_initializer="he_normal", padding="same",)
   model.add(layers.Conv1D(16, 2, activation=activationFunction, input_shape=shape[1:], **kwargs))
-  model.add(layers.Dense(100, activation="relu"))
+  # model.add(layers.Dense(100, activation="relu"))
   # model.add(layers.Dense(20, activation="relu"))
   # model.add(layers.Dense(20, activation="relu"))
 
+  model.add(layers.Conv1D(16, 3, activation=activationFunction, **kwargs))
+  model.add(layers.MaxPooling1D(2))
+  # model.add(layers.Conv1D(16, 3, activation=activationFunction, **kwargs))
+  # model.add(layers.Conv1D(16, 3, activation=activationFunction, **kwargs))
+  # model.add(layers.Conv1D(16, 3, activation=activationFunction, **kwargs))
+  # model.add(layers.Conv1D(16, 3, activation=activationFunction, **kwargs))
+  # model.add(layers.Conv1D(16, 3, activation=activationFunction, **kwargs))
   # model.add(layers.Conv1D(16, 3, activation=activationFunction, **kwargs))
   # model.add(layers.Conv1D(16, 3, activation=activationFunction, **kwargs))
   # model.add(layers.MaxPooling1D(2))
   # model.add(layers.Conv1D(64, 2, activation=activationFunction, **kwargs))
+  # model.add(layers.Conv1D(64, 2, activation=activationFunction, **kwargs))
+  # model.add(layers.Conv1D(64, 2, activation=activationFunction, **kwargs))
+  # model.add(layers.Conv1D(64, 2, activation=activationFunction, **kwargs))
+  # model.add(layers.Conv1D(64, 2, activation=activationFunction, **kwargs))
+  # model.add(layers.Conv1D(64, 2, activation=activationFunction, **kwargs))
   # model.add(layers.MaxPooling1D(2))
   # model.add(layers.Conv1D(128, 2, activation=activationFunction, **kwargs))
-  model.add(layers.Flatten())
+  # model.add(layers.Conv1D(128, 2, activation=activationFunction, **kwargs))
+  # model.add(layers.Conv1D(128, 2, activation=activationFunction, **kwargs))
+  # model.add(layers.MaxPooling1D(2))
+  # model.add(layers.Conv1D(256, 2, activation=activationFunction, **kwargs))
+  # model.add(layers.Flatten())
   model.add(layers.Dense(1))
 
   model = compileModel(model, learning_rate)
