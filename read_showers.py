@@ -146,4 +146,4 @@ for folder_path in folder_list:
 
 
 X = np.stack([XcxAll, dEdXAll, zenithAll, massAll], axis = -1)
-np.savez("/Data/nwoo/Training_Data/showers.npz", showers=X)
+np.savez("./showers.npz", showers=X)

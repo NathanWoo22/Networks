@@ -16,7 +16,7 @@ def runModel(model, learning_rate, batch_size, epochs, validation_split):
         monitor='val_loss',
         mode='min',
         save_best_only=True,
-        verbose=1  
+        verbose=2
     )
 
 
@@ -25,7 +25,7 @@ def runModel(model, learning_rate, batch_size, epochs, validation_split):
         mass_train,
         batch_size=batch_size,
         epochs=epochs,
-        verbose=1,
+        verbose=2,
         callbacks=[model_checkpoint_callback],
         validation_split=validation_split,
         workers = 10000,
