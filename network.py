@@ -48,8 +48,8 @@ massSingleNumberAll = []
 for mass in masses:
     massSingleNumberAll.append(mass[0])
 
-X_train, X_test = np.split(X, [50 * X.shape[0]])
-mass_train, mass_test = np.split(massSingleNumberAll, [50 * X.shape[0]])
+X_train, X_test = np.split(X, [20 * X.shape[0]])
+mass_train, mass_test = np.split(massSingleNumberAll, [20 * X.shape[0]])
 
 learning_rate = 1e-3
 batch_size = 1000

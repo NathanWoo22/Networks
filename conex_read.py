@@ -34,4 +34,5 @@ def readRoot(file):
     dEdX=np.array(tshowercx["dEdX"])
     Xcx=np.array(tshowercx["X"])
     zenith=np.array(tshowercx["zenith"])
-    return Xcx, dEdX, zenith
+    Xmax=np.array(tshowercx["Xmax"])
+    return Xcx, dEdX, zenith, Xmax

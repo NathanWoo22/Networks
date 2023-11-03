@@ -34,36 +34,12 @@ def expandXcxdEdX(Xcx, dEdX, maxLength):
             Xcx[i] = np.append(Xcx[i], 0)
             dEdX[i] = np.append(dEdX[i], 0)
 
-    for i, array in enumerate(dEdX):
-        maxHeight = max(dEdX[i])
-        for j, value in enumerate(dEdX[i]):
-            dEdX[i][j] /= maxHeight
+    # for i, array in enumerate(dEdX):
+    #     maxHeight = max(dEdX[i])
+    #     for j, value in enumerate(dEdX[i]):
+    #         dEdX[i][j] /= maxHeight
 
     return Xcx, dEdX
-
-def runModel(model, learning_rate, batch_size, epochs, validation_split):
-    model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
-        filepath='./best_saved_network',
-        monitor='val_loss',
-        mode='min',
-        save_best_only=True,
-        verbose=1  
-    )
-
-
-    fit = model.fit(
-        X_train,
-        mass_train,
-        batch_size=batch_size,
-        epochs=epochs,
-        verbose=2,
-        callbacks=[model_checkpoint_callback],
-        validation_split=validation_split,
-        workers = 100,
-        use_multiprocessing = True
-    )
-
-    return fit
 
 def plotdEdX(Xcx, dEdX):
     for i in range(100):
@@ -88,6 +64,7 @@ def plotdEdX(Xcx, dEdX):
 XcxAll = []
 dEdXAll = []
 zenithAll = []
+XmaxAll = []
 massAll = []
 massSingleNumberAll = []
 count = 0
@@ -115,7 +92,7 @@ for folder_path in folder_list:
             print("No match found.")
 
         try:
-            Xcx, dEdX, zenith = conex_read.readRoot(fileName)
+            Xcx, dEdX, zenith, Xmax = conex_read.readRoot(fileName)
         except Exception as e:
             print(f"An exception occured: {e}")
             continue
@@ -124,6 +101,7 @@ for folder_path in folder_list:
         maxLength = 700
         Xcx, dEdX = expandXcxdEdX(Xcx, dEdX, maxLength)
         zenith = expandZenithAngles(zenith, maxLength)
+        Xmax = expandZenithAngles(Xmax, maxLength)
         masses = []
         for i in range(maxLength):
             masses.append(float(mass))
@@ -132,11 +110,14 @@ for folder_path in folder_list:
         Xcx = np.vstack(Xcx)
         dEdX = np.vstack(dEdX)
         zenith = np.vstack(zenith)
+        Xmax = np.vstack(Xmax)
 
         for showerXcx in Xcx:
             XcxAll.append(showerXcx)
         for showerdEdX in dEdX:
             dEdXAll.append(showerdEdX)
+        for showerXmax in Xmax:
+            XmaxAll.append(showerXmax)
         for showerZenith in zenith:
             zenithAll.append(showerZenith)
             massAll.append(masses)
@@ -145,5 +126,5 @@ for folder_path in folder_list:
         print("Finished reading file " + fileName)
 
 
-X = np.stack([XcxAll, dEdXAll, zenithAll, massAll], axis = -1)
+X = np.stack([XcxAll, dEdXAll, zenithAll, XmaxAll, massAll], axis = -1)
 np.savez("./showers.npz", showers=X)
