@@ -40,8 +40,9 @@ X = showers['showers']
 print(X.shape)
 
 
-masses = X[:, :, 3]
-# X = X[:, :, :3]
+masses = X[:, :, 4]
+X = X[:, :, 0:4]
+
 print(masses.shape)
 print(X.shape)
 massSingleNumberAll = []
@@ -76,4 +77,4 @@ ax.semilogy()
 ax.grid()
 plt.show()
 
-plt.savefig('Training curve', dpi = 1000)
+plt.savefig('Training_Curve_Only_Xmax', dpi = 1000)

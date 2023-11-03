@@ -1,5 +1,12 @@
-# networks
+# Discussion    
 
+# Things to do
+- How to run on both GPUs
+- Normalize data take ln(dEdX)
+- Ln(A) = ln(filename/100)
+- Plots of every variable to network.
+
+# Running
 To activate this conda environment, use    
 
 $ conda activate dnn   

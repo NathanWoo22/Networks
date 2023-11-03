@@ -99,7 +99,7 @@ for folder_path in folder_list:
         pattern = r'_(\d+)\.root'
         match = re.search(pattern, fileName)
         if match:
-            mass = np.log(float(match.group(1)))
+            mass = np.log(float(match.group(1))/100)
             if math.isnan(mass):
                 mass = 0
             print(f"Mass is: {mass}")
