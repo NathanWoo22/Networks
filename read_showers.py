@@ -9,6 +9,7 @@ import tensorflow as tf
 import os
 import glob
 import re
+import math
 from pathlib import Path
 
 # converts a list of zenith angles to a list of the same angle with different lengths
@@ -30,6 +31,11 @@ def expandZenithAngles(zenithAngles, newLength):
 
 def expandXcxdEdX(Xcx, dEdX, maxLength):
     for i, array in enumerate(Xcx):
+        for j in range(len(dEdX)):
+            dEdX[i][j] = dEdX[i][j]
+            # print(Xcx[i][j])
+            if math.isnan(dEdX[i][j]):
+                dEdX[i][j] = 0
         while len(Xcx[i]) < maxLength:
             Xcx[i] = np.append(Xcx[i], 0)
             dEdX[i] = np.append(dEdX[i], 0)
@@ -77,16 +83,25 @@ folder_list = [str(item) for item in Path(directory_path).iterdir() if item.is_d
 for i in range(len(folder_list)):
     folder_list[i] += '/showers'
 
+flag = 0
 for folder_path in folder_list:
     # folder_path = "/Data/Simulations/Conex_Flat_lnA/data/Conex_170-205_Prod1/showers"
     fileNames = glob.glob(os.path.join(folder_path, '*.root'))
     # Read data for network
+    if flag == 1:
+        break
     for fileName in fileNames:
+        count += 1
+        if count == 1000:
+            flag = 1
+            break
         print("Reading file " + fileName)
         pattern = r'_(\d+)\.root'
         match = re.search(pattern, fileName)
         if match:
-            mass = match.group(1)
+            mass = np.log(float(match.group(1)))
+            if math.isnan(mass):
+                mass = 0
             print(f"Mass is: {mass}")
         else:
             print("No match found.")

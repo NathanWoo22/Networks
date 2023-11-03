@@ -25,7 +25,7 @@ def runModel(model, learning_rate, batch_size, epochs, validation_split):
         mass_train,
         batch_size=batch_size,
         epochs=epochs,
-        verbose=2,
+        verbose=1,
         callbacks=[model_checkpoint_callback],
         validation_split=validation_split,
         workers = 10000,
