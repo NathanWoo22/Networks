@@ -31,14 +31,15 @@ def expandZenithAngles(zenithAngles, newLength):
 
 def expandXcxdEdX(Xcx, dEdX, maxLength):
     for i, array in enumerate(Xcx):
-        for j in range(len(dEdX)):
-            dEdX[i][j] = dEdX[i][j]
+        for j in range(len(dEdX[i])):
+            dEdX[i][j] = np.log(dEdX[i][j])
             # print(Xcx[i][j])
-            if math.isnan(dEdX[i][j]):
+            if math.isnan(dEdX[i][j]) or dEdX[i][j] < 0:
                 dEdX[i][j] = 0
         while len(Xcx[i]) < maxLength:
             Xcx[i] = np.append(Xcx[i], 0)
             dEdX[i] = np.append(dEdX[i], 0)
+        # dEdX[i] = np.log(dEdX[i])
 
     # for i, array in enumerate(dEdX):
     #     maxHeight = max(dEdX[i])
@@ -91,10 +92,10 @@ for folder_path in folder_list:
     if flag == 1:
         break
     for fileName in fileNames:
-        count += 1
-        if count == 1000:
-            flag = 1
-            break
+        # count += 1
+        # if count == 100:
+        #     flag = 1
+        #     break
         print("Reading file " + fileName)
         pattern = r'_(\d+)\.root'
         match = re.search(pattern, fileName)

@@ -43,6 +43,12 @@ def create_model(shape, learning_rate):
   kwargs = dict(kernel_initializer="he_normal", padding="same",)
   model.add(layers.Conv1D(16, 2, activation=activationFunction, input_shape=shape[1:], **kwargs))
   model.add(layers.Dense(100, activation="relu"))
+  model.add(layers.Dense(100, activation="relu"))
+  model.add(layers.Dense(100, activation="relu"))
+  model.add(layers.Dense(100, activation="relu"))
+  model.add(layers.Dense(100, activation="relu"))
+  model.add(layers.Dense(100, activation="relu"))
+  model.add(layers.Dense(100, activation="relu"))
   model.add(layers.Dense(20, activation="relu"))
   model.add(layers.Dense(20, activation="relu"))
 

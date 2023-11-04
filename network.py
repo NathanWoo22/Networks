@@ -10,13 +10,14 @@ import os
 import glob
 import re
 
-def runModel(model, learning_rate, batch_size, epochs, validation_split):
+def runModel(model, learning_rate, batch_size, epochs, validation_split, checkpoint_path):
     model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
-        filepath='./best_saved_network',
+        filepath=checkpoint_path,
+        save_weights_only=True,
         monitor='val_loss',
         mode='min',
         save_best_only=True,
-        verbose=2
+        verbose=1
     )
 
 
@@ -41,7 +42,7 @@ print(X.shape)
 
 
 masses = X[:, :, 4]
-X = X[:, :, 0:4]
+X = X[:, :, 0:3]
 
 print(masses.shape)
 print(X.shape)
@@ -49,19 +50,20 @@ massSingleNumberAll = []
 for mass in masses:
     massSingleNumberAll.append(mass[0])
 
-X_train, X_test = np.split(X, [20 * X.shape[0]])
-mass_train, mass_test = np.split(massSingleNumberAll, [20 * X.shape[0]])
+X_train, X_test = np.split(X, [-2000])
+mass_train, mass_test = np.split(massSingleNumberAll, [-2000])
 
 learning_rate = 1e-3
 batch_size = 1000
-epochs = 1000
+epochs = 10
 validation_split = 0.3
+checkpoint_path = "training_1/cp.ckpt"
 # Create the model
-model = cn.create_model(X.shape, learning_rate)
 
+model = cn.create_model(X.shape, learning_rate)
 print(model.summary())
 
-fit = runModel(model, learning_rate, batch_size, epochs, validation_split)
+fit = runModel(model, learning_rate, batch_size, epochs, validation_split, checkpoint_path)
 
 
 fig, ax = plt.subplots(1, figsize=(8,5))
@@ -75,6 +77,22 @@ ax.set_ylabel('Loss')
 ax.legend()
 ax.semilogy()
 ax.grid()
-plt.show()
 
-plt.savefig('Training_Curve_Only_Xmax', dpi = 1000)
+plt.savefig('Training_Curve', dpi = 1000)
+
+
+# model = cn.create_model(X.shape, learning_rate)
+model.load_weights(checkpoint_path)
+mass_pred = model.predict(X_test, batch_size=1000, verbose=1)[:,0]
+diff = mass_pred - mass_test
+resolution = np.std(diff)
+plt.figure()
+plt.hist(diff, bins=10)
+plt.xlabel('$E_\mathrm{rec} - E_\mathrm{true}$')
+plt.ylabel('# Events')
+plt.text(0.95, 0.95, '$\sigma = %.3f$ EeV' % resolution, ha='right', va='top', transform=plt.gca().transAxes)
+plt.text(0.95, 0.85, '$\mu = %.1f$ EeV' % diff.mean(), ha='right', va='top', transform=plt.gca().transAxes)
+plt.grid()
+plt.xlim(-10, 10)
+plt.tight_layout()
+plt.savefig("Testing_Results")
