@@ -38,14 +38,9 @@ def runModel(model, learning_rate, batch_size, epochs, validation_split, checkpo
 showers = np.load("showers.npz")
 X = showers['showers']
 
-print(X.shape)
-
-
 masses = X[:, :, 4]
 X = X[:, :, 0:3]
 
-print(masses.shape)
-print(X.shape)
 massSingleNumberAll = []
 for mass in masses:
     massSingleNumberAll.append(mass[0])
@@ -58,9 +53,6 @@ batch_size = 100
 epochs = 1000
 validation_split = 0.3
 checkpoint_path = "training_1/cp.ckpt"
-# Create the model
-
-# model = cn.create_model(X.shape, learning_rate)
 model = cn.create_convolutional_model(X.shape, learning_rate)
 print(model.summary())
 

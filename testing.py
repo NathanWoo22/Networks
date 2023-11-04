@@ -29,11 +29,7 @@ X = showers['showers']
 print(X.shape)
 print(X[0,:,0].shape)
 print(X[0,:,1].shape)
-# print(X[0,:,2])
-# print(X[0,:,3])
-# plotdEdX(X[0,:,0], X[0,:,1])
-# for item in X[0,:,1]:
-#     print(item)
+\
 plt.scatter(X[0,:,0], X[0,:,1], s=0.5)
 plt.xlabel('X')
 plt.ylabel('dEdX')
