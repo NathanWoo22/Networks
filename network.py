@@ -9,7 +9,7 @@ import tensorflow as tf
 import os
 import glob
 import re
-
+import test_model as tm
 def runModel(model, learning_rate, batch_size, epochs, validation_split, checkpoint_path):
     model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
         filepath=checkpoint_path,
@@ -50,12 +50,12 @@ massSingleNumberAll = []
 for mass in masses:
     massSingleNumberAll.append(mass[0])
 
-X_train, X_test = np.split(X, [-2000])
-mass_train, mass_test = np.split(massSingleNumberAll, [-2000])
+X_train, X_test = np.split(X, [-50000])
+mass_train, mass_test = np.split(massSingleNumberAll, [-50000])
 
 learning_rate = 1e-3
-batch_size = 1000
-epochs = 10
+batch_size = 100
+epochs = 100
 validation_split = 0.3
 checkpoint_path = "training_1/cp.ckpt"
 # Create the model
@@ -81,18 +81,19 @@ ax.grid()
 plt.savefig('Training_Curve', dpi = 1000)
 
 
+# tm.test_model(X, learning_rate, checkpoint_path, X_test, mass_test)
 # model = cn.create_model(X.shape, learning_rate)
 model.load_weights(checkpoint_path)
-mass_pred = model.predict(X_test, batch_size=1000, verbose=1)[:,0]
+mass_pred = model.predict(X_test, batch_size=100, verbose=1)[:,0]
 diff = mass_pred - mass_test
 resolution = np.std(diff)
 plt.figure()
-plt.hist(diff, bins=10)
+plt.hist(diff.flatten(), bins=20)
 plt.xlabel('$E_\mathrm{rec} - E_\mathrm{true}$')
 plt.ylabel('# Events')
 plt.text(0.95, 0.95, '$\sigma = %.3f$ EeV' % resolution, ha='right', va='top', transform=plt.gca().transAxes)
 plt.text(0.95, 0.85, '$\mu = %.1f$ EeV' % diff.mean(), ha='right', va='top', transform=plt.gca().transAxes)
 plt.grid()
-plt.xlim(-10, 10)
-plt.tight_layout()
+plt.xlim(-5, 5)
+# plt.tight_layout()
 plt.savefig("Testing_Results")

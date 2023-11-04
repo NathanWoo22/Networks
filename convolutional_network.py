@@ -36,21 +36,37 @@ Now, we will set up a neural network to reconstruct the energy of the particle s
 
 """
 
-activationFunction = "relu"
+activationFunction = "elu"
 
 def create_model(shape, learning_rate):
   model = keras.models.Sequential(name="energy_regression_CNN")
   kwargs = dict(kernel_initializer="he_normal", padding="same",)
   model.add(layers.Conv1D(16, 2, activation=activationFunction, input_shape=shape[1:], **kwargs))
-  model.add(layers.Dense(100, activation="relu"))
-  model.add(layers.Dense(100, activation="relu"))
-  model.add(layers.Dense(100, activation="relu"))
-  model.add(layers.Dense(100, activation="relu"))
-  model.add(layers.Dense(100, activation="relu"))
-  model.add(layers.Dense(100, activation="relu"))
-  model.add(layers.Dense(100, activation="relu"))
-  model.add(layers.Dense(20, activation="relu"))
-  model.add(layers.Dense(20, activation="relu"))
+  # model.add(layers.Dense(100, activation=activationFunction, input_shape=shape[1:], **kwargs))
+  model.add(layers.Dense(100, activation=activationFunction))
+  model.add(layers.Dense(100, activation=activationFunction))
+  model.add(layers.Dense(100, activation=activationFunction))
+  model.add(layers.Dense(100, activation=activationFunction))
+  model.add(layers.Dense(100, activation=activationFunction))
+  model.add(layers.Dense(100, activation=activationFunction))
+  model.add(layers.Dense(100, activation=activationFunction))
+  model.add(layers.Dense(100, activation=activationFunction))
+  model.add(layers.Dense(100, activation=activationFunction))
+  model.add(layers.Dense(100, activation=activationFunction))
+  model.add(layers.Dense(100, activation=activationFunction))
+  model.add(layers.Dense(100, activation=activationFunction))
+  model.add(layers.Dense(100, activation=activationFunction))
+  model.add(layers.Dense(100, activation=activationFunction))
+  model.add(layers.Dense(20, activation=activationFunction))
+  model.add(layers.Dense(20, activation=activationFunction))
+  model.add(layers.Dense(20, activation=activationFunction))
+  model.add(layers.Dense(20, activation=activationFunction))
+  model.add(layers.Dense(20, activation=activationFunction))
+  model.add(layers.Dense(20, activation=activationFunction))
+  model.add(layers.Dense(20, activation=activationFunction))
+  model.add(layers.Dense(20, activation=activationFunction))
+  model.add(layers.Dense(20, activation=activationFunction))
+
 
   # model.add(layers.Conv1D(16, 3, activation=activationFunction, **kwargs))
   # model.add(layers.MaxPooling1D(2))
