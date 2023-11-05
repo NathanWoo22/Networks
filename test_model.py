@@ -50,29 +50,31 @@ plt.xlim(-10, 10)
 plt.tight_layout()
 plt.savefig("Testing_Results")
 
-x = [3, 10, 30, 100]
-labels = ["3", "10", "30", "100"]
+x = [1.5, 2, 2.5, 3, 3.5, 4 ]
+labels = ["1.5", "2", "2.5", "3", "3.5", "4"]
 
 fig, axes = plt.subplots(1, 2, figsize=(20, 9))
 axes[0].scatter(mass_test, mass_pred, s=1, alpha=0.60)
 axes[0].set_xlabel(r"$Mass_{true}\;/\;\mathrm{EeV}$")
 axes[0].set_ylabel(r"$Mass_{DNN}\;/\;\mathrm{EeV}$")
-
+axes[0].set_xlim(-0.2, 4.2)
 stat_box = r"$\mu = $ %.3f" % np.mean(diff) + " / EeV" + "\n" + "$\sigma = $ %.3f" % np.std(diff) + " / EeV"
 axes[0].text(0.95, 0.2, stat_box, verticalalignment="top", horizontalalignment="right",
           transform=axes[0].transAxes, backgroundcolor="w")
 axes[0].plot([np.min(mass_test), np.max(mass_test)],
              [np.min(mass_test), np.max(mass_test)], color="red")
 
-sns.regplot(x=mass_test, y=diff / mass_test, x_estimator=np.std, x_bins=12,
+
+sns.regplot(x=mass_test, y=diff / mass_test, x_estimator=np.std, x_bins=24,
             fit_reg=False, color="royalblue", ax=axes[1])
 axes[1].tick_params(axis="both", which="major")
-axes[1].set(xscale="log")
+# axes[1].set(xscale="log")
 plt.xticks(x, labels)
 
 axes[1].set_xlabel(r"$E_{true}\;/\;\mathrm{EeV}$")
 axes[1].set_ylabel(r"$\sigma_{E}/E$")
-axes[1].set_ylim(0, 0.2)
+# axes[1].set_xlim(1, 5)
+axes[1].set_ylim(0, 0.5)
 
 plt.savefig("Scatter_Plot_Results")
 
