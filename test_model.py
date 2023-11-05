@@ -17,7 +17,7 @@ showers = np.load("showers.npz")
 X = showers['showers']
 
 masses = X[:, :, 4]
-X = X[:, :, 0:3]
+X = X[:, :, 0:4]
 
 massSingleNumberAll = []
 for mass in masses:
@@ -46,7 +46,7 @@ plt.ylabel('# Events')
 plt.text(0.95, 0.95, '$\sigma = %.3f$ EeV' % resolution, ha='right', va='top', transform=plt.gca().transAxes)
 plt.text(0.95, 0.85, '$\mu = %.1f$ EeV' % diff.mean(), ha='right', va='top', transform=plt.gca().transAxes)
 plt.grid()
-plt.xlim(-10, 10)
+plt.xlim(-3, 3)
 plt.tight_layout()
 plt.savefig("Testing_Results")
 
@@ -65,7 +65,7 @@ axes[0].plot([np.min(mass_test), np.max(mass_test)],
              [np.min(mass_test), np.max(mass_test)], color="red")
 
 
-sns.regplot(x=mass_test, y=diff / mass_test, x_estimator=np.std, x_bins=24,
+sns.regplot(x=mass_test, y=diff / mass_test, x_estimator=np.std, x_bins=48,
             fit_reg=False, color="royalblue", ax=axes[1])
 axes[1].tick_params(axis="both", which="major")
 # axes[1].set(xscale="log")

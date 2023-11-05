@@ -9,7 +9,7 @@ import tensorflow as tf
 import os
 import glob
 import re
-import test_model as tm
+# import test_model as tm
 def runModel(model, learning_rate, batch_size, epochs, validation_split, checkpoint_path):
     model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
         filepath=checkpoint_path,
@@ -39,7 +39,7 @@ showers = np.load("showers.npz")
 X = showers['showers']
 
 masses = X[:, :, 4]
-X = X[:, :, 0:3]
+X = X[:, :, 0:4]
 
 massSingleNumberAll = []
 for mass in masses:
@@ -50,7 +50,7 @@ mass_train, mass_test = np.split(massSingleNumberAll, [-50000])
 
 learning_rate = 1e-3
 batch_size = 100
-epochs = 1000
+epochs = 200
 validation_split = 0.3
 checkpoint_path = "training_1/cp.ckpt"
 model = cn.create_convolutional_model(X.shape, learning_rate)
@@ -76,17 +76,17 @@ plt.savefig('Training_Curve', dpi = 1000)
 
 # tm.test_model(X, learning_rate, checkpoint_path, X_test, mass_test)
 # model = cn.create_model(X.shape, learning_rate)
-model.load_weights(checkpoint_path)
-mass_pred = model.predict(X_test, batch_size=100, verbose=1)[:,0]
-diff = mass_pred - mass_test
-resolution = np.std(diff)
-plt.figure()
-plt.hist(diff.flatten(), bins=100)
-plt.xlabel('$E_\mathrm{rec} - E_\mathrm{true}$')
-plt.ylabel('# Events')
-plt.text(0.95, 0.95, '$\sigma = %.3f$ EeV' % resolution, ha='right', va='top', transform=plt.gca().transAxes)
-plt.text(0.95, 0.85, '$\mu = %.1f$ EeV' % diff.mean(), ha='right', va='top', transform=plt.gca().transAxes)
-plt.grid()
-plt.xlim(-5, 5)
-# plt.tight_layout()
-plt.savefig("Testing_Results")
+# model.load_weights(checkpoint_path)
+# mass_pred = model.predict(X_test, batch_size=100, verbose=1)[:,0]
+# diff = mass_pred - mass_test
+# resolution = np.std(diff)
+# plt.figure()
+# plt.hist(diff.flatten(), bins=100)
+# plt.xlabel('$E_\mathrm{rec} - E_\mathrm{true}$')
+# plt.ylabel('# Events')
+# plt.text(0.95, 0.95, '$\sigma = %.3f$ EeV' % resolution, ha='right', va='top', transform=plt.gca().transAxes)
+# plt.text(0.95, 0.85, '$\mu = %.1f$ EeV' % diff.mean(), ha='right', va='top', transform=plt.gca().transAxes)
+# plt.grid()
+# plt.xlim(-5, 5)
+# # plt.tight_layout()
+# plt.savefig("Testing_Results")
