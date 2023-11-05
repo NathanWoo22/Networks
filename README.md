@@ -30,5 +30,3 @@ ctrl + a + d
 
 To reattach or list screen just type
 screen -r
-
-Github PAT: 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

@@ -50,7 +50,7 @@ mass_train, mass_test = np.split(massSingleNumberAll, [-50000])
 
 learning_rate = 1e-3
 batch_size = 100
-epochs = 200
+epochs = 1000
 validation_split = 0.3
 checkpoint_path = "training_1/cp.ckpt"
 model = cn.create_convolutional_model(X.shape, learning_rate)

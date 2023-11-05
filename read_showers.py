@@ -59,13 +59,6 @@ def plotdEdX(Xcx, dEdX):
     plt.savefig('Energy function plot', dpi = 1000)
 
 
-# if len(sys.argv) > 1:
-#     file = sys.argv[1]
-# else:
-#     print("Usage: conex_read.py <rootfile.root>")
-#     exit()
-
-
 
 
 XcxAll = []

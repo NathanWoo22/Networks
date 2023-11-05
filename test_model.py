@@ -13,11 +13,20 @@ import math
 import seaborn as sns
 from pathlib import Path
 
+
+if len(sys.argv) > 1:
+    file = sys.argv[1]
+else:
+    print("Usage: read_showers.py <network location>")
+    exit()
+
+
+
 showers = np.load("showers.npz")
 X = showers['showers']
 
 masses = X[:, :, 4]
-X = X[:, :, 0:4]
+X = X[:, :, 0:3]
 
 massSingleNumberAll = []
 for mass in masses:
@@ -30,7 +39,7 @@ learning_rate = 1e-3
 batch_size = 100
 epochs = 1000
 validation_split = 0.3
-checkpoint_path = "training_1/cp.ckpt"
+checkpoint_path = sys.argv[1] + "/training_1/cp.ckpt"
 model = cn.create_convolutional_model(X.shape, learning_rate)
 print(model.summary())
 
@@ -40,7 +49,7 @@ mass_pred = model.predict(X_test, batch_size=1000, verbose=1)[:,0]
 diff = mass_pred - mass_test
 resolution = np.std(diff)
 plt.figure()
-plt.hist(diff, bins=1000)
+plt.hist(diff, bins=200)
 plt.xlabel('$Mass_\mathrm{rec} - Mass_\mathrm{true}$')
 plt.ylabel('# Events')
 plt.text(0.95, 0.95, '$\sigma = %.3f$ EeV' % resolution, ha='right', va='top', transform=plt.gca().transAxes)
@@ -78,4 +87,4 @@ axes[1].set_ylim(0, 0.5)
 
 plt.savefig("Scatter_Plot_Results")
 
-print("made it here?")
+# print("made it here?")
