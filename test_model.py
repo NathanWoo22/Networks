@@ -26,7 +26,7 @@ showers = np.load("showers.npz")
 X = showers['showers']
 
 masses = X[:, :, 4]
-X = X[:, :, 0:5]
+X = X[:, :, 0:3]
 
 massSingleNumberAll = []
 for mass in masses:
@@ -36,9 +36,6 @@ X_train, X_test = np.split(X, [-50000])
 mass_train, mass_test = np.split(massSingleNumberAll, [-50000])
 
 learning_rate = 1e-3
-batch_size = 100
-epochs = 100
-validation_split = 0.3
 checkpoint_path = sys.argv[1] + "/training_1/cp.ckpt"
 model = cn.create_convolutional_model(X.shape, learning_rate)
 print(model.summary())
@@ -59,8 +56,8 @@ plt.xlim(-3, 3)
 plt.tight_layout()
 plt.savefig("Testing_Results")
 
-x = [1.5, 2, 2.5, 3, 3.5, 4 ]
-labels = ["1.5", "2", "2.5", "3", "3.5", "4"]
+x = [0, 1, 2, 3, 4 ]
+labels = ["0", "1", "2", "3", "4"]
 
 fig, axes = plt.subplots(1, 2, figsize=(20, 9))
 axes[0].scatter(mass_test, mass_pred, s=1, alpha=0.60)
@@ -80,10 +77,10 @@ axes[1].tick_params(axis="both", which="major")
 # axes[1].set(xscale="log")
 plt.xticks(x, labels)
 
-axes[1].set_xlabel(r"$E_{true}\;/\;\mathrm{EeV}$")
-axes[1].set_ylabel(r"$\sigma_{E}/E$")
+axes[1].set_xlabel(r"$Mass_{true}\;/\;\mathrm{EeV}$")
+axes[1].set_ylabel(r"$\sigma/E$")
 # axes[1].set_xlim(1, 5)
-axes[1].set_ylim(0, 0.5)
+# axes[1].set_ylim(0, 4)
 
 plt.savefig("Scatter_Plot_Results")
 

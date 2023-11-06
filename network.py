@@ -39,7 +39,7 @@ showers = np.load("showers.npz")
 X = showers['showers']
 
 masses = X[:, :, 4]
-X = X[:, :, 0:5]
+X = X[:, :, 0:3]
 
 massSingleNumberAll = []
 for mass in masses:
@@ -48,10 +48,10 @@ for mass in masses:
 X_train, X_test = np.split(X, [-50000])
 mass_train, mass_test = np.split(massSingleNumberAll, [-50000])
 
-learning_rate = 1e-3
-batch_size = 100
-epochs = 100
-validation_split = 0.3
+learning_rate = 1e-4
+batch_size = 1000
+epochs = 3000
+validation_split = 0.5
 checkpoint_path = "training_1/cp.ckpt"
 model = cn.create_convolutional_model(X.shape, learning_rate)
 print(model.summary())
