@@ -29,7 +29,7 @@ X = showers['showers']
 print(X.shape)
 print(X[0,:,0].shape)
 print(X[0,:,1].shape)
-\
+
 plt.scatter(X[0,:,0], X[0,:,1], s=0.5)
 plt.xlabel('X')
 plt.ylabel('dEdX')

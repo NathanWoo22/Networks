@@ -29,7 +29,7 @@ def runModel(model, learning_rate, batch_size, epochs, validation_split, checkpo
         verbose=1,
         callbacks=[model_checkpoint_callback],
         validation_split=validation_split,
-        workers = 10000,
+        workers = 1000000,
         use_multiprocessing = True
     )
 
@@ -51,7 +51,7 @@ mass_train, mass_test = np.split(massSingleNumberAll, [-50000])
 learning_rate = 1e-4
 batch_size = 1000
 epochs = 3000
-validation_split = 0.5
+validation_split = 0.2
 checkpoint_path = "training_1/cp.ckpt"
 model = cn.create_convolutional_model(X.shape, learning_rate)
 print(model.summary())
