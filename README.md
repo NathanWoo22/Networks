@@ -1,10 +1,10 @@
 # Discussion    
 
 # Things to do
-- How to run on both GPUs
-- Normalize data take ln(dEdX)
-- Ln(A) = ln(filename/100)
-- Plots of every variable to network.
+- Histogram of the input data
+- Lower batch size
+- Lower epochs
+- Add single value zenith instead of whole array
 
 # Running
 To activate this conda environment, use    
@@ -31,4 +31,5 @@ ctrl + a + d
 To reattach or list screen just type
 screen -r
 
-Added SSH Key
+To only use a specific GPU:
+os.environ["CUDA_VISIBLE_DEVICES"]="1"

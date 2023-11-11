@@ -54,7 +54,7 @@ plt.text(0.95, 0.85, '$\mu = %.1f$ EeV' % diff.mean(), ha='right', va='top', tra
 plt.grid()
 plt.xlim(-3, 3)
 plt.tight_layout()
-plt.savefig("Testing_Results")
+plt.savefig("Plots/whoTesting_Results")
 
 x = [0, 1, 2, 3, 4 ]
 labels = ["0", "1", "2", "3", "4"]
@@ -82,6 +82,6 @@ axes[1].set_ylabel(r"$\sigma/E$")
 # axes[1].set_xlim(1, 5)
 # axes[1].set_ylim(0, 4)
 
-plt.savefig("Scatter_Plot_Results")
+plt.savefig("Plots/Scatter_Plot_Results")
 
 # print("made it here?")

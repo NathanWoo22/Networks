@@ -9,6 +9,8 @@ import tensorflow as tf
 import os
 import glob
 import re
+
+
 # import test_model as tm
 def runModel(model, learning_rate, batch_size, epochs, validation_split, checkpoint_path):
     model_checkpoint_callback = tf.keras.callbacks.ModelCheckpoint(
@@ -35,6 +37,9 @@ def runModel(model, learning_rate, batch_size, epochs, validation_split, checkpo
 
     return fit
 
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
+
+
 showers = np.load("showers.npz")
 X = showers['showers']
 
@@ -48,10 +53,10 @@ for mass in masses:
 X_train, X_test = np.split(X, [-50000])
 mass_train, mass_test = np.split(massSingleNumberAll, [-50000])
 
-learning_rate = 1e-4
-batch_size = 1000
+learning_rate = 1e-3
+batch_size = 32
 epochs = 3000
-validation_split = 0.2
+validation_split = 0.3
 checkpoint_path = "training_1/cp.ckpt"
 model = cn.create_convolutional_model(X.shape, learning_rate)
 print(model.summary())
@@ -71,7 +76,7 @@ ax.legend()
 ax.semilogy()
 ax.grid()
 
-plt.savefig('Training_Curve', dpi = 1000)
+plt.savefig('Plots\Training_Curve', dpi = 1000)
 
 
 # tm.test_model(X, learning_rate, checkpoint_path, X_test, mass_test)
