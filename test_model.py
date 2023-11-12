@@ -55,7 +55,7 @@ plt.grid()
 plt.xlim(-3, 3)
 plt.ylim(0, 4000)
 plt.tight_layout()
-plt.savefig("Plots/Testing_Results")
+plt.savefig("Plots/whoTesting_Results")
 
 x = [0, 1, 2, 3, 4 ]
 labels = ["0", "1", "2", "3", "4"]
