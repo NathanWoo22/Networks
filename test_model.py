@@ -53,6 +53,7 @@ plt.text(0.95, 0.95, '$\sigma = %.3f$ EeV' % resolution, ha='right', va='top', t
 plt.text(0.95, 0.85, '$\mu = %.1f$ EeV' % diff.mean(), ha='right', va='top', transform=plt.gca().transAxes)
 plt.grid()
 plt.xlim(-3, 3)
+plt.ylim(0, 4000)
 plt.tight_layout()
 plt.savefig("Plots/Testing_Results")
 
@@ -64,6 +65,7 @@ axes[0].scatter(mass_test, mass_pred, s=1, alpha=0.60)
 axes[0].set_xlabel(r"$Mass_{true}\;/\;\mathrm{EeV}$")
 axes[0].set_ylabel(r"$Mass_{DNN}\;/\;\mathrm{EeV}$")
 axes[0].set_xlim(-0.2, 4.2)
+axes[0].set_ylim(-1, 5)
 stat_box = r"$\mu = $ %.3f" % np.mean(diff) + " / EeV" + "\n" + "$\sigma = $ %.3f" % np.std(diff) + " / EeV"
 axes[0].text(0.95, 0.2, stat_box, verticalalignment="top", horizontalalignment="right",
           transform=axes[0].transAxes, backgroundcolor="w")
@@ -79,6 +81,8 @@ plt.xticks(x, labels)
 
 axes[1].set_xlabel(r"$Mass_{true}\;/\;\mathrm{EeV}$")
 axes[1].set_ylabel(r"$\sigma/E$")
+axes[1].set_ylim(0, 0.5)
+
 # axes[1].set_xlim(1, 5)
 # axes[1].set_ylim(0, 4)
 
