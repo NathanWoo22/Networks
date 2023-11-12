@@ -54,8 +54,8 @@ X_train, X_test = np.split(X, [-50000])
 mass_train, mass_test = np.split(massSingleNumberAll, [-50000])
 
 learning_rate = 1e-3
-batch_size = 32
-epochs = 3000
+batch_size = 64
+epochs = 1000
 validation_split = 0.3
 checkpoint_path = "training_1/cp.ckpt"
 model = cn.create_convolutional_model(X.shape, learning_rate)
@@ -76,7 +76,7 @@ ax.legend()
 ax.semilogy()
 ax.grid()
 
-plt.savefig('Plots\Training_Curve', dpi = 1000)
+plt.savefig('Plots/Training_Curve', dpi = 1000)
 
 
 # tm.test_model(X, learning_rate, checkpoint_path, X_test, mass_test)
