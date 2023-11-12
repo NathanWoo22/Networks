@@ -54,7 +54,7 @@ plt.text(0.95, 0.85, '$\mu = %.1f$ EeV' % diff.mean(), ha='right', va='top', tra
 plt.grid()
 plt.xlim(-3, 3)
 plt.tight_layout()
-plt.savefig("Plots/whoTesting_Results")
+plt.savefig("Plots/Testing_Results")
 
 x = [0, 1, 2, 3, 4 ]
 labels = ["0", "1", "2", "3", "4"]
