@@ -44,7 +44,7 @@ diff = mass_pred - mass_test
 resolution = np.std(diff)
 plt.figure()
 plt.hist(diff, bins=200)
-plt.xlabel('$Mass_\mathrm{rec} - Mass_\mathrm{true}$')
+plt.xlabel('$Mass_\mathrm{rec} - Mass_\mathrm{true} \;/\;\mathrm{Ln(a)}$')
 plt.ylabel('# Events')
 plt.text(0.95, 0.95, '$\sigma = %.3f$ Ln(a)' % resolution, ha='right', va='top', transform=plt.gca().transAxes)
 plt.text(0.95, 0.85, '$\mu = %.1f$ Ln(a)' % diff.mean(), ha='right', va='top', transform=plt.gca().transAxes)
@@ -77,7 +77,7 @@ axes[1].tick_params(axis="both", which="major")
 plt.xticks(x, labels)
 
 axes[1].set_xlabel(r"$Mass_{true}\;/\;\mathrm{Ln(a)}$")
-axes[1].set_ylabel(r"$\sigma/{Ln(a)}$")
+axes[1].set_ylabel(r"$\sigma\;/\;\mathrm{Ln(a)}$")
 axes[1].set_ylim(0, 0.5)
 
 plt.savefig(sys.argv[2] + "/Scatter_Plot_Results")
