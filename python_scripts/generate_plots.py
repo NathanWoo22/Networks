@@ -69,8 +69,9 @@ axes[0].text(0.95, 0.2, stat_box, verticalalignment="top", horizontalalignment="
 axes[0].plot([np.min(mass_test), np.max(mass_test)],
              [np.min(mass_test), np.max(mass_test)], color="red")
 
+epsilon = 1e-1
 
-sns.regplot(x=mass_test, y=diff / mass_test, x_estimator=np.std, x_bins=48,
+sns.regplot(x=mass_test, y=diff/(1 + mass_test), x_estimator=np.std, x_bins=48,
             fit_reg=False, color="royalblue", ax=axes[1])
 axes[1].tick_params(axis="both", which="major")
 # axes[1].set(xscale="log")
@@ -78,7 +79,7 @@ plt.xticks(x, labels)
 
 axes[1].set_xlabel(r"$Mass_{true}\;/\;\mathrm{Ln(a)}$")
 axes[1].set_ylabel(r"$\sigma\;/\;\mathrm{Ln(a)}$")
-axes[1].set_ylim(0, 0.5)
+# axes[1].set_ylim(0, 5)
 
 plt.savefig(sys.argv[2] + "/Scatter_Plot_Results")
 

@@ -49,9 +49,9 @@ for mass in masses:
 X_train, X_test = np.split(X, [-50000])
 mass_train, mass_test = np.split(massSingleNumberAll, [-50000])
 
-learning_rate = 1e-3
+learning_rate = 3e-4
 batch_size = 64
-epochs = 1200
+epochs = 1500
 validation_split = 0.3
 checkpoint_path = "/DataFast/nwoo/networks/current_model_data/model_checkpoint.h5"
 model = cn.create_convolutional_model(X.shape, learning_rate)
