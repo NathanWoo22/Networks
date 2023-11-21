@@ -41,6 +41,8 @@ checkpoint_path = sys.argv[1] + "/model_checkpoint.h5"
 model = load_model(checkpoint_path)
 mass_pred = model.predict(X_test, batch_size=1000, verbose=1)[:,0]
 diff = mass_pred - mass_test
+correlation_coefficient = np.corrcoef(mass_pred, mass_test)[0, 1]
+print(correlation_coefficient)
 resolution = np.std(diff)
 plt.figure()
 plt.hist(diff, bins=200)
@@ -59,26 +61,26 @@ labels = ["0", "1", "2", "3", "4"]
 
 fig, axes = plt.subplots(1, 2, figsize=(20, 9))
 axes[0].scatter(mass_test, mass_pred, s=1, alpha=0.60)
-axes[0].set_xlabel(r"$Mass_{true}\;/\;\mathrm{Ln(a)}$")
-axes[0].set_ylabel(r"$Mass_{DNN}\;/\;\mathrm{Ln(a)}$")
+axes[0].set_xlabel(r"$\mathrm{Mass_{true}}\;/\;\mathrm{Ln(a)}$")
+axes[0].set_ylabel(r"$\mathrm{Mass_{DNN}}\;/\;\mathrm{Ln(a)}$")
 axes[0].set_xlim(-0.2, 4.2)
 axes[0].set_ylim(-1, 5)
-stat_box = r"$\mu = $ %.3f" % np.mean(diff) + " / Ln(a)" + "\n" + "$\sigma = $ %.3f" % np.std(diff) + " / Ln(a)"
-axes[0].text(0.95, 0.2, stat_box, verticalalignment="top", horizontalalignment="right",
+stat_box = r"$\mu = $ %.3f" % np.mean(diff) + " / Ln(a)" + "\n" + "$\sigma = $ %.3f" % np.std(diff) + " / Ln(a)" + "\n" + "$r = %.3f$" % correlation_coefficient 
+axes[0].text(0.75, 0.2, stat_box, verticalalignment="top", horizontalalignment="left",
           transform=axes[0].transAxes, backgroundcolor="w")
 axes[0].plot([np.min(mass_test), np.max(mass_test)],
              [np.min(mass_test), np.max(mass_test)], color="red")
 
 epsilon = 1e-1
 
-sns.regplot(x=mass_test, y=diff/(1 + mass_test), x_estimator=np.std, x_bins=48,
+sns.regplot(x=mass_test, y=diff, x_estimator=np.std, x_bins=48,
             fit_reg=False, color="royalblue", ax=axes[1])
 axes[1].tick_params(axis="both", which="major")
 # axes[1].set(xscale="log")
 plt.xticks(x, labels)
 
-axes[1].set_xlabel(r"$Mass_{true}\;/\;\mathrm{Ln(a)}$")
-axes[1].set_ylabel(r"$\sigma\;/\;\mathrm{Ln(a)}$")
+axes[1].set_xlabel(r"$\mathrm{Mass_{true}}\;/\;\mathrm{Ln(a)}$")
+axes[1].set_ylabel(r"$\mathrm{Mass_{DNN}-Mass{true}}\;/\;\mathrm{Ln(a)}$")
 # axes[1].set_ylim(0, 5)
 
 plt.savefig(sys.argv[2] + "/Scatter_Plot_Results")
