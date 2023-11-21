@@ -80,7 +80,7 @@ axes[1].tick_params(axis="both", which="major")
 plt.xticks(x, labels)
 
 axes[1].set_xlabel(r"$\mathrm{Mass_{true}}\;/\;\mathrm{Ln(a)}$")
-axes[1].set_ylabel(r"$\mathrm{Mass_{DNN}-Mass{true}}\;/\;\mathrm{Ln(a)}$")
+axes[1].set_ylabel(r"$\mathrm{Mass_{DNN}-Mass_{true}}\;/\;\mathrm{Ln(a)}$")
 # axes[1].set_ylim(0, 5)
 
 plt.savefig(sys.argv[2] + "/Scatter_Plot_Results")
