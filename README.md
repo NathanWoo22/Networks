@@ -19,7 +19,7 @@ Give your screen a name:
 screen -S <name> 
 
 Run you neural network:
-tensorman =ml-env run --gpu python -- ./python_networks/network.py
+tensorman =ml-env run --gpu python -- ./network.py
 
 Or better yet make dnn-env the default:
 tensorman default =ml-env gpu
@@ -32,7 +32,7 @@ To reattach or list screen just type
 screen -r
 
 To test a network that is currently training:
-python generate_plots.py /DataFast/nwoo/networks/current_model_data /DataFast/nwoo/networks/current_model_plots
+python generate_plots.py current_model_data current_model_plots
 
 To only use a specific GPU:
 os.environ["CUDA_VISIBLE_DEVICES"]="1"

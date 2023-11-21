@@ -53,13 +53,13 @@ learning_rate = 3e-4
 batch_size = 64
 epochs = 1500
 validation_split = 0.3
-checkpoint_path = "/DataFast/nwoo/networks/current_model_data/model_checkpoint.h5"
+checkpoint_path = "current_model_data/model_checkpoint.h5"
 model = cn.create_convolutional_model(X.shape, learning_rate)
 print(model.summary())
 
 fit = runModel(model, learning_rate, batch_size, epochs, validation_split, checkpoint_path)
 
 # Save the history to a text file
-with open('/DataFast/nwoo/networks/current_model_data/history.txt', 'w') as file:
+with open('current_model_data/history.txt', 'w') as file:
     for loss, val_loss in zip(fit.history['loss'], fit.history['val_loss']):
         file.write(f'{loss} {val_loss}\n')
