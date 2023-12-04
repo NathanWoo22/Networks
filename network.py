@@ -28,7 +28,8 @@ def runModel(model, learning_rate, batch_size, epochs, validation_split, checkpo
         callbacks=[model_checkpoint_callback],
         validation_split=validation_split,
         workers = 1000000,
-        use_multiprocessing = True
+        use_multiprocessing = True,
+        shuffle = True
     )
 
     return fit
@@ -36,7 +37,7 @@ def runModel(model, learning_rate, batch_size, epochs, validation_split, checkpo
 os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 
-showers = np.load("./showers.npz")
+showers = np.load("./showers_noise_250_125.npz")
 X = showers['showers']
 
 masses = X[:, :, 4]
@@ -46,13 +47,13 @@ massSingleNumberAll = []
 for mass in masses:
     massSingleNumberAll.append(mass[0])
 
-X_train, X_test = np.split(X, [-50000])
+X_train, _ = np.split(X, [-50000])
 mass_train, mass_test = np.split(massSingleNumberAll, [-50000])
 
-learning_rate = 3e-4
+learning_rate = 0.001
 batch_size = 64
-epochs = 1500
-validation_split = 0.3
+epochs = 1000
+validation_split = 0.15
 checkpoint_path = "current_model_data/model_checkpoint.h5"
 model = cn.create_convolutional_model(X.shape, learning_rate)
 print(model.summary())
