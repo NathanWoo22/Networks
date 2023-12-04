@@ -53,7 +53,8 @@ def generate_plots(data_location, save_location):
     plt.grid()
     plt.xlim(-4, 4)
     plt.ylim(0, 3000)
-    plt.tight_layout()
+    # plt.tight_layout()
+    plt.title(sys.argv[3])
     plt.savefig(save_location + "/Testing_Results")
 
     x = [0, 1, 2, 3, 4 ]
@@ -82,7 +83,7 @@ def generate_plots(data_location, save_location):
     axes[1].set_xlabel(r"$\mathrm{Mass_{true}}\;/\;\mathrm{Ln(a)}$")
     axes[1].set_ylabel(r"$\mathrm{Mass_{DNN}-Mass_{true}}\;/\;\mathrm{Ln(a)}$")
     # axes[1].set_ylim(0, 5)
-
+    fig.suptitle(sys.argv[3])
     plt.savefig(save_location + "/Scatter_Plot_Results")
 
     # Check that training has completed before checking history
@@ -107,7 +108,7 @@ def generate_plots(data_location, save_location):
             ax.legend()
             ax.semilogy()
             ax.grid()
-
+            plt.title(sys.argv[3])
             plt.savefig(save_location + '/Training_Curve', dpi = 1000)
     
     return np.std(diff), correlation_coefficient
