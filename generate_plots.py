@@ -1,7 +1,13 @@
 import uproot
 import numpy as np
 import sys
+import mpl_scatter_density
+import datashader as ds
+from datashader.mpl_ext import dsshow
+import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+from matplotlib.colors import LinearSegmentedColormap
 import keras
 from keras.models import load_model
 import conex_read
@@ -12,6 +18,7 @@ import glob
 import re
 import math
 import seaborn as sns
+from scipy.stats import gaussian_kde
 from pathlib import Path
 
 # def main():
@@ -21,7 +28,16 @@ from pathlib import Path
 #     #     print("Usage: generate_plots.py <model data location> <save figure location>")
 #     #     exit()
 #     generate_plots(sys.argv[1], sys.argv[2])
+# "Viridis-like" colormap with white background
+def scatter_with_gaussian_kde(ax, x, y):
+    # https://stackoverflow.com/a/20107592/3015186
+    # Answer by Joel Kington
 
+    xy = np.vstack([x, y])
+    z = gaussian_kde(xy)(xy)
+    idx = z.argsort()
+    x, y, z = x[idx], y[idx], z[idx]
+    ax.scatter(x, y, c=z, s=1)
 
 def generate_plots(data_location, save_location):
     showers = np.load("showers.npz")
@@ -62,6 +78,8 @@ def generate_plots(data_location, save_location):
 
     fig, axes = plt.subplots(1, 2, figsize=(20, 9))
     axes[0].scatter(mass_test, mass_pred, s=1, alpha=0.60)
+    # axes[0].hist2d(mass_test, mass_pred, bins=[200,200], cmin=0, norm=mpl.colors.LogNorm())
+    # scatter_with_gaussian_kde(axes[0], mass_test, mass_pred)
     axes[0].set_xlabel(r"$\mathrm{Mass_{true}}\;/\;\mathrm{Ln(a)}$")
     axes[0].set_ylabel(r"$\mathrm{Mass_{DNN}}\;/\;\mathrm{Ln(a)}$")
     axes[0].set_xlim(-0.2, 4.2)
@@ -85,6 +103,18 @@ def generate_plots(data_location, save_location):
     # axes[1].set_ylim(0, 5)
     fig.suptitle(sys.argv[3])
     plt.savefig(save_location + "/Scatter_Plot_Results")
+
+    fig, ax = plt.subplots(1, 1, figsize=(10, 10))
+    # ax.hist2d(mass_test, mass_pred, bins=[200,200], cmin=0, norm=mpl.colors.Normalize())
+    scatter_with_gaussian_kde(ax, mass_test, mass_pred)
+    plt.savefig("extra")
+
+
+    # fig, ax1 = plt.plot()
+    # binning = 50
+    # counts, xedges, yedges, im = ax1.hist2d(mass_test, mass_pred, bins=[binning, binning], cmin=1,
+    #                                        norm=mpl.colors.LogNorm())
+    
 
     # Check that training has completed before checking history
     if os.path.exists(data_location + "/history.txt"):

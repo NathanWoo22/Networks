@@ -30,8 +30,8 @@ def expandZenithAngles(zenithAngles, newLength):
     return zenithAngles
 
 def expandXcxdEdX(Xcx, dEdX, maxLength):
-    mean = 250
-    std_dev = 125
+    mean = 1000
+    std_dev = 500
     for i, array in enumerate(Xcx):
         for j in range(len(dEdX[i])):
             dEdX[i][j] += (np.random.normal(mean, std_dev, 1))[0]
@@ -126,4 +126,4 @@ for folder_path in folder_list:
 
 
 X = np.stack([XcxAll, dEdXAll, zenithAll, XmaxAll, massAll], axis = -1)
-np.savez("./showers_noise_250_125.npz", showers=X)
+np.savez("./showers_noise_1000_500.npz", showers=X)
