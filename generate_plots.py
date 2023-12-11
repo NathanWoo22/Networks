@@ -39,8 +39,9 @@ def scatter_with_gaussian_kde(ax, x, y):
     x, y, z = x[idx], y[idx], z[idx]
     ax.scatter(x, y, c=z, s=1)
 
-def generate_plots(data_location, save_location):
-    showers = np.load("showers.npz")
+def generate_plots(data_location, save_location, showers):
+    plotTitle = sys.argv[4]
+    showers = np.load(showers)
     X = showers['showers']
 
     masses = X[:, :, 4]
@@ -70,7 +71,7 @@ def generate_plots(data_location, save_location):
     plt.xlim(-4, 4)
     plt.ylim(0, 3000)
     # plt.tight_layout()
-    plt.title(sys.argv[3])
+    plt.title(plotTitle)
     plt.savefig(save_location + "/Testing_Results")
 
     x = [0, 1, 2, 3, 4 ]
@@ -78,7 +79,11 @@ def generate_plots(data_location, save_location):
 
     fig, axes = plt.subplots(1, 2, figsize=(20, 9))
     axes[0].scatter(mass_test, mass_pred, s=1, alpha=0.60)
-    # axes[0].hist2d(mass_test, mass_pred, bins=[200,200], cmin=0, norm=mpl.colors.LogNorm())
+
+    # hist = axes[0].hist2d(mass_test, mass_pred, bins=[200,200], cmin=0, norm=mpl.colors.LogNorm())
+    # cbar = plt.colorbar(hist[3], ax=axes[0])
+    # cbar.set_label("Number of Events")
+
     # scatter_with_gaussian_kde(axes[0], mass_test, mass_pred)
     axes[0].set_xlabel(r"$\mathrm{Mass_{true}}\;/\;\mathrm{Ln(a)}$")
     axes[0].set_ylabel(r"$\mathrm{Mass_{DNN}}\;/\;\mathrm{Ln(a)}$")
@@ -101,7 +106,7 @@ def generate_plots(data_location, save_location):
     axes[1].set_xlabel(r"$\mathrm{Mass_{true}}\;/\;\mathrm{Ln(a)}$")
     axes[1].set_ylabel(r"$\mathrm{Mass_{DNN}-Mass_{true}}\;/\;\mathrm{Ln(a)}$")
     # axes[1].set_ylim(0, 5)
-    fig.suptitle(sys.argv[3])
+    fig.suptitle(plotTitle)
     plt.savefig(save_location + "/Scatter_Plot_Results")
 
     fig, ax = plt.subplots(1, 1, figsize=(10, 10))
@@ -138,7 +143,7 @@ def generate_plots(data_location, save_location):
             ax.legend()
             ax.semilogy()
             ax.grid()
-            plt.title(sys.argv[3])
+            plt.title(plotTitle)
             plt.savefig(save_location + '/Training_Curve', dpi = 1000)
     
     return np.std(diff), correlation_coefficient

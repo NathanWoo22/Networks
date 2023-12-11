@@ -37,7 +37,7 @@ def runModel(model, learning_rate, batch_size, epochs, validation_split, checkpo
 os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 
-showers = np.load("./showers_noise_1000_5007u.npz")
+showers = np.load("./showers.npz")
 X = showers['showers']
 
 masses = X[:, :, 4]
